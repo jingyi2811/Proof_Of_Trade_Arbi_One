@@ -70,7 +70,7 @@ contract Proof_of_Trade_Arbi_One is Ownable, Pausable {
         uint amount_
     ) external whenNotPaused {
         require(amount_ > 0, "Invalid amount");
-        bytes32 message =  keccak256(abi.encode(timestamp_, amount_, msg.sender));
+        bytes32 message =  getMessage(timestamp_, amount_, msg.sender);
         require(!_swapKey[message], "Key Already Claimed");
         require(isValidData(timestamp_, amount_, msg.sender, signature_), "Invalid Signature");
         _swapKey[message] = true;
@@ -84,7 +84,7 @@ contract Proof_of_Trade_Arbi_One is Ownable, Pausable {
         address msgSender_,
         bytes memory signature_
     ) public view returns (bool) {
-        bytes32 message =  keccak256(abi.encode(timestamp_, amount_, msgSender_));
+        bytes32 message =  getMessage(timestamp_, amount_, msgSender_);
         return ECDSA.recover(message, signature_) == _signerAddress;
     }
 
@@ -92,7 +92,7 @@ contract Proof_of_Trade_Arbi_One is Ownable, Pausable {
         string calldata timestamp_,
         uint amount_,
         address msgSender_
-    ) external pure returns (bytes32) {
+    ) public pure returns (bytes32) {
         return keccak256(abi.encode(timestamp_, amount_, msgSender_));
     }
 }

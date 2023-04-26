@@ -11,6 +11,7 @@ contract Proof_of_Trade_Arbi_One is Ownable, Pausable {
     // Using
 
     using SafeERC20 for IERC20;
+    using ECDSA for bytes32;
 
     // Global variables
 
@@ -81,7 +82,9 @@ contract Proof_of_Trade_Arbi_One is Ownable, Pausable {
         bytes32 message_,
         bytes memory signature_
     ) public view returns (bool) {
-        return ECDSA.recover(message_, signature_) == _signerAddress;
+        return message_
+        .toEthSignedMessageHash()
+        .recover(signature_) == _signerAddress;
     }
 
     function getMessage(

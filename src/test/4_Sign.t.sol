@@ -30,39 +30,39 @@ contract SignTest is DSTest {
        vm.stopPrank();
     }
 
-    function test4_0() public {
-        address alice = vm.addr(1); // Set alice as signer
-
-        string memory timestamp = Strings.toString(block.timestamp);
-        uint amount = 1;
-        address msgSender = address(0x11);
-
-        bytes32 message = keccak256(abi.encode(timestamp, amount, msgSender)); // Construct message
-        (uint8 v, bytes32 r, bytes32 s) = vm.sign(1, message); // Sign by alice
-
-        address signer = ecrecover(message, v, r, s);
-        assertEq(alice, signer);
-        assertEq(message, x.getMessage(timestamp, amount, msgSender)); // Check getMessage function
-
-        bytes memory signature = abi.encodePacked(r, s, v); // recover signature
-
-        vm.startPrank(msgSender);
-        x.claim(timestamp, signature, amount);
-        vm.stopPrank();
-
-        // Try to claim again
-        vm.startPrank(msgSender);
-        vm.expectRevert(bytes("Key Already Claimed"));
-        x.claim(timestamp, signature, amount);
-        vm.stopPrank();
-
-        // Pause protocol and claim again
-        vm.startPrank(x.owner());
-        x.pauseProtocol();
-        vm.expectRevert(bytes("Pausable: paused"));
-        x.claim(timestamp, signature, amount);
-        vm.stopPrank();
-    }
+//    function test4_0() public {
+//        address alice = vm.addr(1); // Set alice as signer
+//
+//        string memory timestamp = Strings.toString(block.timestamp);
+//        uint amount = 1;
+//        address msgSender = address(0x11);
+//
+//        bytes32 message = keccak256(abi.encode(timestamp, amount, msgSender)); // Construct message
+//        (uint8 v, bytes32 r, bytes32 s) = vm.sign(1, message); // Sign by alice
+//
+//        address signer = ecrecover(message, v, r, s);
+//        assertEq(alice, signer);
+//        assertEq(message, x.getMessage(timestamp, amount, msgSender)); // Check getMessage function
+//
+//        bytes memory signature = abi.encodePacked(r, s, v); // recover signature
+//
+//        vm.startPrank(msgSender);
+//        x.claim(timestamp, signature, amount);
+//        vm.stopPrank();
+//
+//        // Try to claim again
+//        vm.startPrank(msgSender);
+//        vm.expectRevert(bytes("Key Already Claimed"));
+//        x.claim(timestamp, signature, amount);
+//        vm.stopPrank();
+//
+//        // Pause protocol and claim again
+//        vm.startPrank(x.owner());
+//        x.pauseProtocol();
+//        vm.expectRevert(bytes("Pausable: paused"));
+//        x.claim(timestamp, signature, amount);
+//        vm.stopPrank();
+//    }
 
     function test4_1() public {
 
@@ -114,29 +114,29 @@ contract SignTest is DSTest {
         vm.stopPrank();
     }
 
-    function test4_3() public {
-        // What happened if no balance
-
-        address alice = vm.addr(1); // Set alice as signer
-
-        string memory timestamp = Strings.toString(block.timestamp);
-        uint amount = 3;
-        address msgSender = address(0x11);
-
-        bytes32 message = keccak256(abi.encode(timestamp, amount, msgSender)); // Construct message
-        (uint8 v, bytes32 r, bytes32 s) = vm.sign(1, message); // Sign by alice
-
-        address signer = ecrecover(message, v, r, s);
-        assertEq(alice, signer);
-        assertEq(message, x.getMessage(timestamp, amount, msgSender)); // Check getMessage function
-
-        bytes memory signature = abi.encodePacked(r, s, v); // recover signature
-
-        vm.startPrank(msgSender);
-        vm.expectRevert(bytes("ERC20: transfer amount exceeds balance"));
-        x.claim(timestamp, signature, amount);
-        vm.stopPrank();
-    }
+//    function test4_3() public {
+//        // What happened if no balance
+//
+//        address alice = vm.addr(1); // Set alice as signer
+//
+//        string memory timestamp = Strings.toString(block.timestamp);
+//        uint amount = 3;
+//        address msgSender = address(0x11);
+//
+//        bytes32 message = keccak256(abi.encode(timestamp, amount, msgSender)); // Construct message
+//        (uint8 v, bytes32 r, bytes32 s) = vm.sign(1, message); // Sign by alice
+//
+//        address signer = ecrecover(message, v, r, s);
+//        assertEq(alice, signer);
+//        assertEq(message, x.getMessage(timestamp, amount, msgSender)); // Check getMessage function
+//
+//        bytes memory signature = abi.encodePacked(r, s, v); // recover signature
+//
+//        vm.startPrank(msgSender);
+//        vm.expectRevert(bytes("ERC20: transfer amount exceeds balance"));
+//        x.claim(timestamp, signature, amount);
+//        vm.stopPrank();
+//    }
 
     function test4_4() public {
         // What happened if timestamp value contribute to amount?

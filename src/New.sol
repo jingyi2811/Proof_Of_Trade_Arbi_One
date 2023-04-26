@@ -11,7 +11,6 @@ contract Proof_of_Trade_Arbi_One is Ownable, Pausable {
     // Using
 
     using SafeERC20 for IERC20;
-    using ECDSA for bytes32;
 
     // Global variables
 

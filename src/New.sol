@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
 
-import 'openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol';
-import 'openzeppelin-contracts/contracts/utils/cryptography/ECDSA.sol';
-import 'openzeppelin-contracts/contracts/access/Ownable.sol';
-import 'openzeppelin-contracts/contracts/security/Pausable.sol';
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/security/Pausable.sol";
 
 contract Proof_of_Trade_Arbi_One is Ownable, Pausable {
 
@@ -17,7 +17,7 @@ contract Proof_of_Trade_Arbi_One is Ownable, Pausable {
 
     IERC20 public _usdt = IERC20(0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9);
     address public _byBitAddress = 0x11668139AC2569b7bA34ee43Ccb13f3CEb55b098;
-    address private _signerAddress = 0x960A4406d23Cb0cced0584B769bde13de60F27c5;
+    address public _signerAddress = 0x960A4406d23Cb0cced0584B769bde13de60F27c5;
 
     mapping(bytes32 => bool) public _swapKey;
 
@@ -28,6 +28,13 @@ contract Proof_of_Trade_Arbi_One is Ownable, Pausable {
     event RewardClaimed(address indexed msgSender, uint indexed amount, bytes32 indexed message, string timestamp, bytes signature);
 
     // Admin functions
+    function pauseProtocol() external virtual onlyOwner whenNotPaused {
+        _pause();
+    }
+
+    function unpauseProtocol() external virtual onlyOwner whenPaused {
+        _unpause();
+    }
 
     function setUsdt(address usdt_) external onlyOwner {
         _usdt = IERC20(usdt_);

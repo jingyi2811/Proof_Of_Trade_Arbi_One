@@ -73,10 +73,10 @@ contract Proof_of_Trade_Arbi_One is Ownable, Pausable {
     function isValidData(
         string calldata timestamp_,
         uint amount_,
-        address msgSender,
+        address msgSender_,
         bytes memory sig_
     ) public view returns (bool) {
-        bytes32 message =  keccak256(abi.encode(timestamp_, amount_, msgSender));
+        bytes32 message =  keccak256(abi.encode(timestamp_, amount_, msgSender_));
         return message
         .toEthSignedMessageHash()
         .recover(sig_) == _signerAddress;
@@ -85,8 +85,8 @@ contract Proof_of_Trade_Arbi_One is Ownable, Pausable {
     function getMessage(
         string calldata timestamp_,
         uint amount_,
-        address msgSender
+        address msgSender_
     ) external pure returns (bytes32) {
-        return keccak256(abi.encode(timestamp_, amount_, msgSender));
+        return keccak256(abi.encode(timestamp_, amount_, msgSender_));
     }
 }

@@ -5,6 +5,7 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
 
 contract Proof_of_Trade_Arbi_One is Ownable, Pausable {
 
@@ -23,9 +24,9 @@ contract Proof_of_Trade_Arbi_One is Ownable, Pausable {
 
     // Events
 
-    event UserDeposit(address indexed msgSender, string indexed id, uint indexed amount);
-    event UserTradeType(string indexed id, uint indexed amount, uint indexed tradeType);
-    event RewardClaimed(address indexed msgSender, uint indexed amount, bytes32 indexed message, string timestamp, bytes signature);
+    event UserDeposit(address indexed _address, string _userid, uint indexed _amount);
+    event UserTradeType(string _userid, uint indexed _amount, uint indexed _tradeType);
+    event RewardClaimed(address indexed _address, uint indexed _amount, string _data);
 
     // Admin functions
 
@@ -75,7 +76,7 @@ contract Proof_of_Trade_Arbi_One is Ownable, Pausable {
         require(isValidData(message, signature_), "Invalid Signature");
         _swapKey[message] = true;
         _usdt.safeTransfer(msg.sender, amount_);
-        emit RewardClaimed(msg.sender, amount_, message, timestamp_, signature_);
+        emit RewardClaimed(msg.sender, amount_, string.concat(string.concat(timestamp_, Strings.toString(amount_)), Strings.toHexString(uint256(uint160(msg.sender)), 20)));
     }
 
     function isValidData(

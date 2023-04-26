@@ -72,20 +72,17 @@ contract Proof_of_Trade_Arbi_One is Ownable, Pausable {
         require(amount_ > 0, "Invalid amount");
         bytes32 message =  getMessage(timestamp_, amount_, msg.sender);
         require(!_swapKey[message], "Key Already Claimed");
-        require(isValidData(timestamp_, amount_, msg.sender, signature_), "Invalid Signature");
+        require(isValidData(message, signature_), "Invalid Signature");
         _swapKey[message] = true;
         _usdt.safeTransfer(msg.sender, amount_);
         emit RewardClaimed(msg.sender, amount_, message, timestamp_, signature_);
     }
 
     function isValidData(
-        string calldata timestamp_,
-        uint amount_,
-        address msgSender_,
+        bytes32 message_,
         bytes memory signature_
     ) public view returns (bool) {
-        bytes32 message =  getMessage(timestamp_, amount_, msgSender_);
-        return ECDSA.recover(message, signature_) == _signerAddress;
+        return ECDSA.recover(message_, signature_) == _signerAddress;
     }
 
     function getMessage(

@@ -28,6 +28,7 @@ contract Proof_of_Trade_Arbi_One is Ownable, Pausable {
     event RewardClaimed(address indexed msgSender, uint indexed amount, bytes32 indexed message, string timestamp, bytes signature);
 
     // Admin functions
+
     function pauseProtocol() external virtual onlyOwner whenNotPaused {
         _pause();
     }
@@ -50,7 +51,7 @@ contract Proof_of_Trade_Arbi_One is Ownable, Pausable {
 
     // External and public functions
 
-    function Deposit(
+    function deposit(
         uint amount_,
         uint tradeType_,
         string memory id_
@@ -63,7 +64,7 @@ contract Proof_of_Trade_Arbi_One is Ownable, Pausable {
         emit UserTradeType(id_, amount_, tradeType_);
     }
 
-    function Claim(
+    function claim(
         string calldata timestamp_,
         bytes calldata signature_,
         uint amount_
@@ -81,12 +82,10 @@ contract Proof_of_Trade_Arbi_One is Ownable, Pausable {
         string calldata timestamp_,
         uint amount_,
         address msgSender_,
-        bytes memory sig_
+        bytes memory signature_
     ) public view returns (bool) {
         bytes32 message =  keccak256(abi.encode(timestamp_, amount_, msgSender_));
-        return message
-        .toEthSignedMessageHash()
-        .recover(sig_) == _signerAddress;
+        return ECDSA.recover(message, signature_) == _signerAddress;
     }
 
     function getMessage(

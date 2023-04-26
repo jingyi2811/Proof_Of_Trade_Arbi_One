@@ -30,7 +30,7 @@ contract PausibleTest is DSTest {
         // Default
         vm.startPrank(owner);
         erc20.approve(address(x), 1);
-        x.Deposit(1, 1, '1');
+        x.deposit(1, 1, '1');
         vm.stopPrank();
 
         // Pause
@@ -38,14 +38,14 @@ contract PausibleTest is DSTest {
         x.pauseProtocol();
         erc20.approve(address(x), 1);
         vm.expectRevert("Pausable: paused");
-        x.Deposit(1, 1, '1');
+        x.deposit(1, 1, '1');
         vm.stopPrank();
 
         // UnPause
         vm.startPrank(owner);
         x.unpauseProtocol();
         erc20.approve(address(x), 1);
-        x.Deposit(1, 1, '1');
+        x.deposit(1, 1, '1');
         vm.stopPrank();
     }
 }

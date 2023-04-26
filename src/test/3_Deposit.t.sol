@@ -8,7 +8,7 @@ import {Vm} from "forge-std/Vm.sol";
 import "../MyERC20.sol";
 import "../New.sol";
 
-contract OwnableTest is DSTest {
+contract DepositTest is DSTest {
     Vm internal immutable vm = Vm(HEVM_ADDRESS);
     Utilities internal utils;
 
@@ -33,7 +33,7 @@ contract OwnableTest is DSTest {
 
         vm.startPrank(owner);
         erc20.approve(address(x), 1);
-        x.Deposit(1, 1, '1');
+        x.deposit(1, 1, '1');
         vm.stopPrank();
 
         assert(erc20.balanceOf(owner) == (1 ether - 1));
@@ -46,7 +46,7 @@ contract OwnableTest is DSTest {
         vm.startPrank(owner);
         erc20.approve(address(x), 1);
         vm.expectRevert(bytes("Invalid amount"));
-        x.Deposit(0, 1, '1');
+        x.deposit(0, 1, '1');
         vm.stopPrank();
     }
 
@@ -55,7 +55,7 @@ contract OwnableTest is DSTest {
         vm.startPrank(owner);
         erc20.approve(address(x), 1);
         vm.expectRevert(bytes("Invalid Trade Type"));
-        x.Deposit(1, 3, '1');
+        x.deposit(1, 3, '1');
         vm.stopPrank();
     }
 
@@ -63,7 +63,7 @@ contract OwnableTest is DSTest {
         // Deposit with insufficient allowance
         vm.startPrank(owner);
         vm.expectRevert(bytes("ERC20: insufficient allowance"));
-        x.Deposit(1, 1, '1');
+        x.deposit(1, 1, '1');
         vm.stopPrank();
     }
 
@@ -72,7 +72,7 @@ contract OwnableTest is DSTest {
         vm.startPrank(owner);
         erc20.approve(address(x), 2 ether);
         vm.expectRevert(bytes("ERC20: transfer amount exceeds balance"));
-        x.Deposit(2 ether, 1, '1');
+        x.deposit(2 ether, 1, '1');
         vm.stopPrank();
     }
 }

@@ -45,4 +45,35 @@ contract OwnableTest is DSTest {
 
         assert(x.owner() == owner);
     }
+
+    function test2_2() public {
+        // Owner can update important address
+        vm.startPrank(owner);
+        x.setUsdt(address(0x04));
+        x.setByBitAddress(address(0x05));
+        x.setSignerAddress(address(0x06));
+        vm.stopPrank();
+
+        assert(x._usdt() == IERC20(address(0x04)));
+        assert(x._byBitAddress() == address(0x05));
+        assert(x._signerAddress() == address(0x06));
+    }
+
+    function test2_3() public {
+        // Non owner cannot update important address
+        vm.startPrank(address(0x10));
+        vm.expectRevert();
+        x.setUsdt(address(0x04));
+        vm.stopPrank();
+
+        vm.startPrank(address(0x10));
+        vm.expectRevert();
+        x.setByBitAddress(address(0x05));
+        vm.stopPrank();
+
+        vm.startPrank(address(0x10));
+        vm.expectRevert();
+        x.setSignerAddress(address(0x05));
+        vm.stopPrank();
+    }
 }

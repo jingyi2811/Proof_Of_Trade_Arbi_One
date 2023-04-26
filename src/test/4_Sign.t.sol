@@ -137,4 +137,28 @@ contract SignTest is DSTest {
         x.claim(timestamp, signature, amount);
         vm.stopPrank();
     }
+
+    function test4_4() public {
+        // What happened if timestamp value contribute to amount?
+
+        address alice = vm.addr(1); // Set alice as signer
+
+        string memory timestamp = "1234";
+        uint amount = 3;
+        address msgSender = address(0x11);
+
+        bytes32 message = keccak256(abi.encode(timestamp, amount, msgSender)); // Construct message
+        (uint8 v, bytes32 r, bytes32 s) = vm.sign(1, message); // Sign by alice
+
+        address signer = ecrecover(message, v, r, s);
+        assertEq(alice, signer);
+        assertEq(message, x.getMessage(timestamp, amount, msgSender)); // Check getMessage function
+
+        bytes memory signature = abi.encodePacked(r, s, v); // recover signature
+
+        vm.startPrank(msgSender);
+        vm.expectRevert(bytes("Invalid Signature"));
+        x.claim("123", signature, 43);
+        vm.stopPrank();
+    }
 }

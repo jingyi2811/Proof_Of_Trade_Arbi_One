@@ -2,5 +2,11 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/abc" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/abc/lib/ds-test" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/abc/lib/forge-std" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/forge-std" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/forge-std/lib/ds-test" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/openzeppelin-contracts" vcs="Git" />
   </component>
 </project>

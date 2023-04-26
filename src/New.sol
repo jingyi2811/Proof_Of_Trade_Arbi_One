@@ -41,7 +41,7 @@ contract Proof_of_Trade_Arbi_One is Ownable, Pausable {
         _signerAddress = signerAddress_;
     }
 
-    // External functions
+    // External and public functions
 
     function Deposit(
         uint amount_,
@@ -80,5 +80,13 @@ contract Proof_of_Trade_Arbi_One is Ownable, Pausable {
         return message
         .toEthSignedMessageHash()
         .recover(sig_) == _signerAddress;
+    }
+
+    function getMessage(
+        string calldata timestamp_,
+        uint amount_,
+        address msgSender
+    ) external pure returns (bytes32) {
+        return keccak256(abi.encode(timestamp_, amount_, msgSender));
     }
 }
